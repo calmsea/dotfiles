@@ -1,0 +1,51 @@
+#!/bin/sh
+
+set -e
+
+INSTALL_PACKAGES=""
+YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
+YADM=$(which yadm)
+
+cd "$HOME"
+
+main(){
+  echo "Updating the yadm repo origin URL"
+  $YADM remote set-url origin "git@github.com:calmsea/dotfiles.git"
+
+  echo "-- update submodule"
+  $YADM submodule update --init --recursive
+
+  CLASSES=$($YADM config --get-all local.class)
+
+  #
+  # check
+  #
+  echo -- check
+  echo local.class: ${CLASSES}
+  check
+}
+
+#
+#
+#
+check(){
+  commands="zsh dash vi vim python python3 git awk emacs tmux"
+  available=""
+  unavailable=""
+  for cmd in $commands; do
+    if which "$cmd" >/dev/null 2>&1; then
+      available="$available$cmd "
+    else
+      unavailable="$unavailable$cmd "
+    fi
+  done
+  echo "commands(available)   : "$available
+  echo "commands(unavailable) : "$unavailable
+}
+
+#
+# run main
+#
+main
+
+# EOF

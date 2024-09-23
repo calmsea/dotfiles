@@ -1,0 +1,4 @@
+#
+import = [
+    "C:\\msys64\\home\\{{yadm.user}}\\.local\\share\\alacritty-theme\\themes\\nord.toml",
+]

@@ -1,0 +1,10 @@
+#
+#
+#
+shell = { program = "powershell.exe" }
+
+[window]
+dynamic_title=false
+title="PowerShell"
+
+#

@@ -1,0 +1,5 @@
+{% if yadm.class == "user" %}
+[user]
+    name = "calmsea"
+    email = "calmsea.deepfog@gmail.com"
+{% endif %}

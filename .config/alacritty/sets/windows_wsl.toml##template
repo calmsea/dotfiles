@@ -1,0 +1,6 @@
+#
+import = [
+    "C:\\msys64\\home\\{{yadm.user}}\\.config\\alacritty\\alacritty-common.toml",
+    "C:\\msys64\\home\\{{yadm.user}}\\.config\\alacritty\\os-windows.toml",
+    "C:\\msys64\\home\\{{yadm.user}}\\.config\\alacritty\\shell-wsl.toml",
+]

@@ -1,0 +1,10 @@
+#
+#
+#
+shell = { program = "cmd.exe" }
+
+[window]
+dynamic_title=false
+title="CMD"
+
+#

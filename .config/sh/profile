@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# when zsh
+#   login : zprofile .> sh/profile
+# when bash
+#   login : profile .> sh/profile .> bashrc .> sh/bashrc
+# when sh
+#   login : profile .> sh/profile
+#
+: sh/profile
+
+# XDG_CONFIG_HOME - ユーザ個別の設定が書き込まれるディレクトリ(/etc)
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:=${HOME}/.config}"
+# XDG_CACHE_HOME - ユーザ個別の重要でない(キャッシュ)データが書き込まれるディレクトリ(/var/cache)
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:=${HOME}/.cache}"
+# XDG_DATA_HOME - ユーザ個別のデータファイルが書き込まれるディレクトリ(/usr/share)
+export XDG_DATA_HOME="${XDG_DATA_HOME:=${HOME}/.local/share}"
+# XDG_STATE_HOME - ユーザ個別の状態ファイルが書き込まれるディレクトリ(/var/lib)
+export XDG_STATE_HOME="${XDG_STATE_HOME:=${HOME}/.local/state}"
+# XDG_BIN_HOME - ユーザ個別の実行ファイルが書き込まれるディレクトリ(/bin)
+export XDG_BIN_HOME="${XDG_BIN_HOME:=$HOME/.local/bin}"
+
+if [ ! -d "$XDG_BIN_HOME" ]; then
+    mkdir -p "$XDG_BIN_HOME"
+fi
+
+export VIMINIT="let $MYVIMRC=\"$XDG_CONFIG_HOME/vim/vimrc\" | source $MYVIMRC"
+export AZURE_CONFIG_DIR="$XDG_DATA_HOME"/azure
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npm/npmrc
+export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+export SQLITE_HISTORY="$XDG_STATE_HOME"/sqlite_history
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+    # shellcheck source=/dev/null
+	. "$HOME/.bashrc"
+    fi
+fi
+
+#
+# PATH
+#
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+# EOF

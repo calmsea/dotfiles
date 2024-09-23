@@ -1,0 +1,10 @@
+#
+#
+#
+shell = { program = "wsl.exe", args = ['~', ] }
+
+[window]
+dynamic_title=false
+title="WSL"
+
+# EOF

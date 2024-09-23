@@ -1,0 +1,16 @@
+#
+#
+#
+shell = { program = "C:\\msys64\\usr\\bin\\bash.exe", args = ['--login', '-i',] }
+
+#
+[env]
+#MSYS = "winsymlinks:nativestrict"
+MSYSTEM = "UCRT64"
+#WSLENV = "WT_SESSION::WT_PROFILE_ID"
+
+[window]
+dynamic_title=false
+title="UCRT64"
+
+# EOF

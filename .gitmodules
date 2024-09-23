@@ -1,0 +1,9 @@
+[submodule "alacritty-theme"]
+	path = .local/share/alacritty-theme
+	url = https://github.com/alacritty/alacritty-theme
+[submodule "nordtheme/dircolors"]
+	path = .local/share/nordtheme/dircolors
+	url = https://github.com/nordtheme/dircolors.git
+[submodule "yadm"]
+	path = .local/share/yadm-project
+	url = https://github.com/TheLocehiliosan/yadm.git
