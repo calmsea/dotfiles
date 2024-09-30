@@ -1,0 +1,58 @@
+#!/bin/sh
+
+cd "$HOME"
+
+#
+# setup yadm
+#
+echo -- setup yadm
+yadm=$(which yadm)
+echo yadm: $yadm
+$yadm submodule update --init --recursive
+
+if [ -f $HOME/.local/bin/yadm ]; then
+    yadm="$HOME/.local/bin/yadm"
+    echo yadm: $yadm
+fi
+$yadm version
+
+echo "Updating the yadm repo origin URL"
+$yadm remote set-url origin "git@github.com:calmsea/dotfiles.git"
+
+#
+INSTALL_PACKAGES=""
+YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
+CLASSES=$($yadm config --get-all local.class)
+
+#
+# check config
+# 
+echo -- check config
+echo local.class: ${CLASSES}
+for class in ${CLASSES}; do
+    package_name=""
+    case $class in
+        emacs)
+            package_name="emacs-nox"
+            ;;
+        zsh)
+            package_name="zsh"
+            ;;
+        *)
+            continue
+            ;;
+    esac
+    if [ -n "$package_name" ]; then
+        INSTALL_PACKAGES="$INSTALL_PACKAGES $package_name"
+    fi
+    echo local.class:$class:
+done
+
+#
+# install packages
+#
+echo -- install
+if [ -n "$INSTALL_PACKAGES" ]; then
+    echo INSTALL_PACKAGES: $INSTALL_PACKAGES
+    sudo apt-get install $INSTALL_PACKAGES
+fi
