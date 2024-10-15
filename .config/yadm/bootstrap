@@ -1,58 +1,97 @@
 #!/bin/sh
 
+set -e
+
+INSTALL_PACKAGES=""
+YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
+
 cd "$HOME"
+
+setup_yadm(){
+  pushd $HOME/.local/share/yadm/repo.git
+  git submodule update --init --recursive
+  popd
+
+  if [ -f "${YADM_PROJECT_DIR}/yadm" ]; then
+    yadm="${YADM_PROJECT_DIR}/yadm"
+  else
+    yadm=$(which yadm)
+  fi
+  $yadm version
+}
+
+install_packages_apt(){
+  for class in ${CLASSES}; do
+    package_name=""
+    case $class in
+      emacs)
+        package_name="emacs-nox"
+        ;;
+      zsh)
+        package_name="zsh"
+        ;;
+      *)
+        continue
+        ;;
+    esac
+    if [ -n "$package_name" ]; then
+      INSTALL_PACKAGES="$INSTALL_PACKAGES $package_name"
+    fi
+    echo local.class:$class:
+  done
+  sudo apt-get install $INSTALL_PACKAGES
+}
+
+install_packages_msys(){
+  for class in ${CLASSES}; do
+    package_name=""
+    case $class in
+      emacs)
+        package_name="emacs"
+        ;;
+      zsh)
+        package_name="zsh"
+        ;;
+      *)
+        continue
+        ;;
+    esac
+    if [ -n "$package_name" ]; then
+      INSTALL_PACKAGES="$INSTALL_PACKAGES $package_name"
+    fi
+    echo local.class:$class:
+  pacman -S $INSTALL_PACKAGES
+  done
+}
 
 #
 # setup yadm
 #
 echo -- setup yadm
-yadm=$(which yadm)
+setup_yadm
 echo yadm: $yadm
-$yadm submodule update --init --recursive
-
-if [ -f $HOME/.local/bin/yadm ]; then
-    yadm="$HOME/.local/bin/yadm"
-    echo yadm: $yadm
-fi
-$yadm version
 
 echo "Updating the yadm repo origin URL"
 $yadm remote set-url origin "git@github.com:calmsea/dotfiles.git"
 
 #
-INSTALL_PACKAGES=""
-YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
 CLASSES=$($yadm config --get-all local.class)
+DISTRO=$(awk -F= '/^NAME=/{print $2}' /etc/os-release)
 
 #
 # check config
-# 
+#
 echo -- check config
 echo local.class: ${CLASSES}
-for class in ${CLASSES}; do
-    package_name=""
-    case $class in
-        emacs)
-            package_name="emacs-nox"
-            ;;
-        zsh)
-            package_name="zsh"
-            ;;
-        *)
-            continue
-            ;;
-    esac
-    if [ -n "$package_name" ]; then
-        INSTALL_PACKAGES="$INSTALL_PACKAGES $package_name"
-    fi
-    echo local.class:$class:
-done
 
 #
 # install packages
 #
 echo -- install
-if [ -n "$INSTALL_PACKAGES" ]; then
-    echo INSTALL_PACKAGES: $INSTALL_PACKAGES
-    sudo apt-get install $INSTALL_PACKAGES
+if [ "${DISTRO}" = "MSYS2" ]; then
+  install_packages_msys
+elif which apt-get; then
+  install_packages_apt
+else
+  echo "packager is not found. pacman or apt-get are needed."
 fi
