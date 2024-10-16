@@ -7,6 +7,27 @@ YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
 
 cd "$HOME"
 
+main(){
+  echo -- setup yadm
+  setup_yadm
+  echo yadm: $yadm
+
+  echo "Updating the yadm repo origin URL"
+  $yadm remote set-url origin "git@github.com:calmsea/dotfiles.git"
+
+  CLASSES=$($yadm config --get-all local.class)
+
+  #
+  # check
+  #
+  echo -- check
+  echo local.class: ${CLASSES}
+  check
+}
+
+#
+# setup yadm
+#
 setup_yadm(){
   pushd $HOME/.local/share/yadm/repo.git
   git submodule update --init --recursive
@@ -18,80 +39,30 @@ setup_yadm(){
     yadm=$(which yadm)
   fi
   $yadm version
+  rm -f ${HOME}/.local/bin/yadm && ln -s $yadm ${HOME}/.local/bin/yadm
 }
 
-install_packages_apt(){
-  for class in ${CLASSES}; do
-    package_name=""
-    case $class in
-      emacs)
-        package_name="emacs-nox"
-        ;;
-      zsh)
-        package_name="zsh"
-        ;;
-      *)
-        continue
-        ;;
-    esac
-    if [ -n "$package_name" ]; then
-      INSTALL_PACKAGES="$INSTALL_PACKAGES $package_name"
+#
+#
+#
+check(){
+  commands="zsh dash vi vim python python3 git awk emacs tmux"
+  available=""
+  unavailable=""
+  for cmd in $commands; do
+    if which "$cmd" >& /dev/null; then
+      available="$available$cmd "
+    else
+      unavailable="$unavailable$cmd "
     fi
-    echo local.class:$class:
   done
-  sudo apt-get install $INSTALL_PACKAGES
-}
-
-install_packages_msys(){
-  for class in ${CLASSES}; do
-    package_name=""
-    case $class in
-      emacs)
-        package_name="emacs"
-        ;;
-      zsh)
-        package_name="zsh"
-        ;;
-      *)
-        continue
-        ;;
-    esac
-    if [ -n "$package_name" ]; then
-      INSTALL_PACKAGES="$INSTALL_PACKAGES $package_name"
-    fi
-    echo local.class:$class:
-  pacman -S $INSTALL_PACKAGES
-  done
+  echo "commands(available)   : "$available
+  echo "commands(unavailable) : "$unavailable
 }
 
 #
-# setup yadm
+# run main
 #
-echo -- setup yadm
-setup_yadm
-echo yadm: $yadm
+main
 
-echo "Updating the yadm repo origin URL"
-$yadm remote set-url origin "git@github.com:calmsea/dotfiles.git"
-
-#
-CLASSES=$($yadm config --get-all local.class)
-DISTRO=$(awk -F= '/^NAME=/{print $2}' /etc/os-release)
-
-#
-# check config
-#
-echo -- check config
-echo local.class: ${CLASSES}
-
-#
-# install packages
-#
-echo -- install
-if [ "${DISTRO}" = "MSYS2" ]; then
-  install_packages_msys
-elif which apt-get; then
-  install_packages_apt
-else
-  echo "packager is not found. pacman or apt-get are needed."
-fi
+# EOF
