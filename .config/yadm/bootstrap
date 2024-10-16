@@ -4,18 +4,15 @@ set -e
 
 INSTALL_PACKAGES=""
 YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
+YADM=$(which yadm)
 
 cd "$HOME"
 
 main(){
-  echo -- setup yadm
-  setup_yadm
-  echo yadm: $yadm
-
   echo "Updating the yadm repo origin URL"
-  $yadm remote set-url origin "git@github.com:calmsea/dotfiles.git"
+  $YADM remote set-url origin "git@github.com:calmsea/dotfiles.git"
 
-  CLASSES=$($yadm config --get-all local.class)
+  CLASSES=$($YADM config --get-all local.class)
 
   #
   # check
@@ -26,23 +23,6 @@ main(){
 }
 
 #
-# setup yadm
-#
-setup_yadm(){
-  pushd $HOME/.local/share/yadm/repo.git
-  git submodule update --init --recursive
-  popd
-
-  if [ -f "${YADM_PROJECT_DIR}/yadm" ]; then
-    yadm="${YADM_PROJECT_DIR}/yadm"
-  else
-    yadm=$(which yadm)
-  fi
-  $yadm version
-  rm -f ${HOME}/.local/bin/yadm && ln -s $yadm ${HOME}/.local/bin/yadm
-}
-
-#
 #
 #
 check(){
@@ -50,7 +30,7 @@ check(){
   available=""
   unavailable=""
   for cmd in $commands; do
-    if which "$cmd" >& /dev/null; then
+    if which "$cmd" >/dev/null 2>&1; then
       available="$available$cmd "
     else
       unavailable="$unavailable$cmd "
