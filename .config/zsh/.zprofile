@@ -1,8 +1,8 @@
 #!/usr/bin/zsh
 
-LOCAL_BIN_DIR="${HOME}/.local/bin"
-if [ ${PATH} = ${PATH#"${LOCAL_BIN_DIR}"} ]; then
-  export PATH="${LOCAL_BIN_DIR}:${PATH}"
+if [ -f ${XDG_CONFIG_HOME}/sh/profile ]; then
+  . ${XDG_CONFIG_HOME}/sh/profile
 fi
+
 
 # EOF

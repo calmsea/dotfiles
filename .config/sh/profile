@@ -1,0 +1,15 @@
+#!/bin/sh
+
+: ${XDG_BIN_HOME:=$HOME/.local/bin}
+
+if [ ! -d $XDG_BIN_HOME ]; then
+    mkdir -p $XDG_BIN_HOME
+fi
+tmp=${PATH#"*${XDG_BIN_HOME}"}
+if [ "$tmp" = "$PATH" ]; then
+    PATH="${XDG_BIN_HOME}:$PATH"
+fi
+export PATH
+
+
+# EOF
