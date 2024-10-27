@@ -12,8 +12,8 @@ test -d "$XDG_DATA_HOME/bash"  || mkdir -p "$XDG_DATA_HOME/bash"
 HISTFILE="$XDG_STATE_HOME/bash/history"
 
 # completion
-if [ -f "$XDG_DATA_HOME/yadm-project/completion/bash/yadm" ]; then
-    . "$XDG_DATA_HOME/yadm-project/completion/bash/yadm"
+if [ -f "$XDG_DATA_HOME/yadm/yadm/completion/bash/yadm" ]; then
+    . "$XDG_DATA_HOME/yadm/yadm/completion/bash/yadm"
 fi
 
 # EOF

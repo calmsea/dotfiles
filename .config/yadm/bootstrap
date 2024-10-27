@@ -3,7 +3,7 @@
 set -e
 
 INSTALL_PACKAGES=""
-YADM_PROJECT_DIR="$HOME/.local/share/yadm-project"
+YADM_PROJECT_DIR="$HOME/.local/share/yadm/yadm"
 YADM=$(which yadm)
 
 cd "$HOME"

@@ -10,11 +10,11 @@ test -d "$XDG_STATE_HOME/zsh" || mkdir -p "$XDG_STATE_HOME/zsh"
 test -d "$XDG_CACHE_HOME/zsh" || mkdir -p "$XDG_CACHE_HOME/zsh"
 test -d "$XDG_DATA_HOME/zsh"  || mkdir -p "$XDG_DATA_HOME/zsh"
 
-DIRCOLORS_CONFFILE="${XDG_CONFIG_HOME}/nordtheme/dircolors/src/dir_colors"
+DIRCOLORS_CONFFILE="${XDG_CONFIG_HOME}/yadm/nordtheme/dircolors/src/dir_colors"
 
 HISTFILE="$XDG_STATE_HOME/zsh/history"
 
-fpath=($XDG_DATA_HOME/yadm-project/completion/zsh $fpath)
+fpath=($XDG_DATA_HOME/yadm/yadm/completion/zsh $fpath)
 autoload -Uz compinit
 compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-$ZSH_VERSION
 
