@@ -2,8 +2,6 @@
 
 set -e
 
-INSTALL_PACKAGES=""
-YADM_PROJECT_DIR="$HOME/.local/share/yadm/yadm"
 YADM=$(which yadm)
 
 cd "$HOME"
@@ -21,7 +19,7 @@ main(){
   # check
   #
   echo -- check
-  echo local.class: ${CLASSES}
+  echo local.class: "${CLASSES}"
   check
 }
 
@@ -39,8 +37,8 @@ check(){
       unavailable="$unavailable$cmd "
     fi
   done
-  echo "commands(available)   : "$available
-  echo "commands(unavailable) : "$unavailable
+  echo "commands(available)   : $available"
+  echo "commands(unavailable) : $unavailable"
 }
 
 #
