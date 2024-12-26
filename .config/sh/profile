@@ -24,7 +24,7 @@ if [ ! -d "$XDG_BIN_HOME" ]; then
     mkdir -p "$XDG_BIN_HOME"
 fi
 
-export VIMINIT="let $MYVIMRC=\"$XDG_CONFIG_HOME/vim/vimrc\" | source $MYVIMRC"
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 export AZURE_CONFIG_DIR="$XDG_DATA_HOME"/azure
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npm/npmrc
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
